@@ -9,13 +9,18 @@ class AdImages(models.Model):
         verbose_name='Изображение'
     )
 
+    @property
+    @admin.display(description='Название изображения')
+    def image_name(self):
+        return self.image.name
+
     class Meta:
         db_table = 'Images'
         verbose_name = 'Изображение'
         verbose_name_plural = "Изображения"
 
     def __str__(self):
-        return f'Изображение {self.image.name}'
+        return f'Изображение {self.image_name}'
 
 
 class Categories(models.Model):
