@@ -1,0 +1,12 @@
+{% extends 'extend/base.html' %}
+
+{% block load %}
+
+{% endblock %}
+
+
+{% block content %}
+    {% for offer in offers %}
+        <h1>{{ offer.title }}</h1>
+    {% endfor %}
+{% endblock %}

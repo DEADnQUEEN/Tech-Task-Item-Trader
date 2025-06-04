@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tradeApp import constraints
+from django.contrib import admin
 
 
 class AdImages(models.Model):
@@ -12,6 +13,9 @@ class AdImages(models.Model):
         db_table = 'Images'
         verbose_name = 'Изображение'
         verbose_name_plural = "Изображения"
+
+    def __str__(self):
+        return f'Изображение {self.image.name}'
 
 
 class Categories(models.Model):
@@ -25,6 +29,9 @@ class Categories(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    def __str__(self):
+        return f'Категория {self.name}'
+
 
 class ItemState(models.Model):
     name = models.CharField(
@@ -34,8 +41,8 @@ class ItemState(models.Model):
 
     class Meta:
         db_table = 'ItemStates'
-        verbose_name = 'Состояние'
-        verbose_name_plural = 'Состояния'
+        verbose_name = 'Состояние предмета'
+        verbose_name_plural = 'Состояния предметов'
 
 
 class TradeStates(models.Model):
@@ -47,7 +54,7 @@ class TradeStates(models.Model):
     class Meta:
         db_table = 'TradeStates'
         verbose_name = 'Состояние обмена'
-        verbose_name_plural = 'Состояния'
+        verbose_name_plural = 'Состояния обменов'
 
 
 class Ad(models.Model):
@@ -91,6 +98,16 @@ class Ad(models.Model):
         verbose_name = 'Предложение'
         verbose_name_plural = 'Предложения'
 
+    @property
+    @admin.display(description='Логин пользователя')
+    def username(self):
+        return self.user.username
+
+    @property
+    @admin.display(description='Краткое описание')
+    def short_desctiption(self):
+        return
+
 
 class ExchangeProposal(models.Model):
     sender = models.ForeignKey(
@@ -121,3 +138,18 @@ class ExchangeProposal(models.Model):
         verbose_name='Дата создания',
         auto_now_add=True
     )
+
+    @property
+    @admin.display(description='Логин отправителя')
+    def sender_username(self):
+        return self.sender.username
+
+    @property
+    @admin.display(description='Логин получателя')
+    def receiver_username(self):
+        return self.receiver.username
+
+    class Meta:
+        db_table = 'Trades'
+        verbose_name = 'Обмен'
+        verbose_name_plural = "Обмены"
