@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tradeApp import constraints
-from django.utils import timezone
 
 
 class AdImages(models.Model):
@@ -34,7 +33,7 @@ class ItemState(models.Model):
     )
 
     class Meta:
-        db_table = 'States'
+        db_table = 'ItemStates'
         verbose_name = 'Состояние'
         verbose_name_plural = 'Состояния'
 
@@ -46,7 +45,7 @@ class TradeStates(models.Model):
     )
 
     class Meta:
-        db_table = 'States'
+        db_table = 'TradeStates'
         verbose_name = 'Состояние обмена'
         verbose_name_plural = 'Состояния'
 
@@ -55,7 +54,8 @@ class Ad(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Пользователь'
+        verbose_name='Пользователь',
+        related_name='item_user'
     )
     title = models.CharField(
         max_length=constraints.MAX_TITLE_LENGTH,
@@ -71,11 +71,15 @@ class Ad(models.Model):
     )
     category = models.ForeignKey(
         Categories,
-        verbose_name='Категории'
+        verbose_name='Категории',
+        on_delete=models.CASCADE,
+        related_name='category_item'
     )
     state = models.ForeignKey(
         ItemState,
-        verbose_name='Состояние товара'
+        verbose_name='Состояние товара',
+        on_delete=models.CASCADE,
+        related_name='state_item'
     )
     created_at = models.DateField(
         verbose_name='Дата создания',
@@ -91,11 +95,15 @@ class Ad(models.Model):
 class ExchangeProposal(models.Model):
     sender = models.ForeignKey(
         User,
-        verbose_name='Отправитель'
+        verbose_name='Отправитель',
+        on_delete=models.CASCADE,
+        related_name='trade_sender'
     )
     receiver = models.ForeignKey(
         User,
-        verbose_name='Получатель'
+        verbose_name='Получатель',
+        on_delete=models.CASCADE,
+        related_name='trade_receiver'
     )
     comment = models.CharField(
         max_length=constraints.MAX_DESCRIPTION_LENGTH,
@@ -105,7 +113,9 @@ class ExchangeProposal(models.Model):
     )
     status = models.ForeignKey(
         TradeStates,
-        verbose_name='Состояние обмена'
+        verbose_name='Состояние обмена',
+        on_delete=models.CASCADE,
+        related_name='trade_state'
     )
     created_at = models.DateField(
         verbose_name='Дата создания',
