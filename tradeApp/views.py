@@ -1,6 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django import http
 from tradeApp import models, constraints
+
+
+def home_page(request: http.HttpRequest) -> http.HttpResponse:
+    print(request.user.is_authenticated)
+    if not request.user.is_authenticated:
+        return redirect(reverse('register'))
+
+    return redirect(reverse('show_offers'))
 
 
 def show_items(request: http.HttpRequest, page: int = None) -> http.HttpResponse:

@@ -110,7 +110,7 @@ class Ad(models.Model):
 
     @property
     @admin.display(description='Краткое описание')
-    def short_desctiption(self):
+    def short_description(self):
         return
 
 
